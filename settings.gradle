@@ -1,0 +1,5 @@
+rootProject.name = 'ci-failure-analyst-rebuild'
+
+include 'core'
+include 'greeting'
+include 'app'

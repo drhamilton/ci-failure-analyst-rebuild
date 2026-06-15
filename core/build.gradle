@@ -1,0 +1,4 @@
+// core depends on nothing — this emptiness is the whole point.
+// The domain has no knowledge of Spring, HTTP, JSON, or any outer module.
+dependencies {
+}
