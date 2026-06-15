@@ -2,9 +2,14 @@ package com.dillon.cianalyst.app;
 
 import org.springframework.stereotype.Component;
 
-@Component
-public class FailureAnalyzer {
+import com.dillon.cianalyst.core.AnalysisResult;
+import com.dillon.cianalyst.core.BuildLog;
+import com.dillon.cianalyst.core.FailureAnalyzer;
 
+@Component
+public class StubFailureAnalyzer implements FailureAnalyzer {
+
+    @Override
     public AnalysisResult analyze(BuildLog log) {
         AnalysisResult result = new AnalysisResult();
 
@@ -15,5 +20,4 @@ public class FailureAnalyzer {
 
         return result;
     }
-
 }

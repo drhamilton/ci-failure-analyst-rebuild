@@ -2,8 +2,12 @@ package com.dillon.cianalyst.app;
 
 import org.springframework.stereotype.Component;
 
+import com.dillon.cianalyst.core.AnalysisResult;
+import com.dillon.cianalyst.core.Notifier;
+
 @Component
-public class ConsoleNotifier {
+public class ConsoleNotifier implements Notifier {
+    @Override
     public void send(AnalysisResult result) {
         System.out.println("=== BUILD FAILURE ANALYSIS ===");
         System.out.println("Repo:       " + result.event.repo);

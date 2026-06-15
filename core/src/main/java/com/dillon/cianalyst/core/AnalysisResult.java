@@ -1,4 +1,4 @@
-package com.dillon.cianalyst.app;
+package com.dillon.cianalyst.core;
 
 public class AnalysisResult {
     public BuildEvent event;

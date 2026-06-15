@@ -21,6 +21,7 @@ subprojects {
     dependencyManagement {
         imports {
             mavenBom "org.springframework.boot:spring-boot-dependencies:3.2.5"
+            mavenBom "com.google.cloud:spring-cloud-gcp-dependencies:5.3.0"
         }
     }
 
