@@ -1,0 +1,23 @@
+# Gradle
+.gradle/
+build/
+*/build/
+
+# Spring Boot
+*.jar
+*.war
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Env
+.env
+.env.*
+
+# OS
+.DS_Store
+
+# Working notes
+WORKING.md
