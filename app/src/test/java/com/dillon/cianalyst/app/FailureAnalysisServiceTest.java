@@ -33,7 +33,7 @@ public class FailureAnalysisServiceTest {
 
     @BeforeEach
     void setUp() {
-        service = new FailureAnalysisService(List.of(githubParser), logFetcher, analyzer, notifier, store);
+        service = new FailureAnalysisService(List.of(githubParser), logFetcher, analyzer, store);
     }
 
     @Test

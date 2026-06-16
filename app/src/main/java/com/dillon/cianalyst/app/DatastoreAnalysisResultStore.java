@@ -1,9 +1,12 @@
 package com.dillon.cianalyst.app;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.dillon.cianalyst.core.AnalysisResult;
 import com.dillon.cianalyst.core.AnalysisResultStore;
@@ -15,11 +18,23 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class DatastoreAnalysisResultStore implements AnalysisResultStore {
     private final AnalysisResultRepository repository;
+    private final OutboxRepository outboxRepository;
 
     @Override
+    @Transactional
     public AnalysisResult save(AnalysisResult result) {
         AnalysisResultEntity saved = repository.save(toEntity(result));
+        outboxRepository.save(pendingOutbox(saved.id));
         return toDomain(saved);
+    }
+
+    private OutboxEntity pendingOutbox(Long referenceId) {
+        OutboxEntity row = new OutboxEntity();
+        row.referenceId = referenceId;
+        row.status = OutboxStatus.PENDING;
+        row.createdAt = Instant.now();
+        row.attempts = 0;
+        return row;
     }
 
     @Override
@@ -27,6 +42,11 @@ public class DatastoreAnalysisResultStore implements AnalysisResultStore {
         List<AnalysisResult> results = new ArrayList<>();
         repository.findAll().forEach(entity -> results.add(toDomain(entity)));
         return results;
+    }
+
+    @Override
+    public Optional<AnalysisResult> findById(Long id) {
+        return repository.findById(id).map(this::toDomain);
     }
 
     private AnalysisResultEntity toEntity(AnalysisResult result) {
