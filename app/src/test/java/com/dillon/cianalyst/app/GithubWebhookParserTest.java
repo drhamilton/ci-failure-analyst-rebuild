@@ -26,10 +26,10 @@ class GithubWebhookParserTest {
 
         BuildEvent event = new GithubWebhookParser(new ObjectMapper()).parse(payload);
 
-        assertThat(event.id).isEqualTo("9876543210");
-        assertThat(event.repo).isEqualTo("dillon/payments-service");
-        assertThat(event.branch).isEqualTo("main");
-        assertThat(event.status).isEqualTo("failure");
+        assertThat(event.id()).isEqualTo("9876543210");
+        assertThat(event.repo()).isEqualTo("dillon/payments-service");
+        assertThat(event.branch()).isEqualTo("main");
+        assertThat(event.status()).isEqualTo("failure");
     }
 
     @Test

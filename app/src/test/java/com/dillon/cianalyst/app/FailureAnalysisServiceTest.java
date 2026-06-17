@@ -19,14 +19,12 @@ import com.dillon.cianalyst.core.BuildEvent;
 import com.dillon.cianalyst.core.BuildLog;
 import com.dillon.cianalyst.core.BuildLogFetcher;
 import com.dillon.cianalyst.core.FailureAnalyzer;
-import com.dillon.cianalyst.core.Notifier;
 
 @ExtendWith(MockitoExtension.class)
 public class FailureAnalysisServiceTest {
     @Mock GithubWebhookParser githubParser;
     @Mock BuildLogFetcher logFetcher;
     @Mock FailureAnalyzer analyzer;
-    @Mock Notifier notifier;
     @Mock AnalysisResultStore store;
 
     @InjectMocks FailureAnalysisService service;
@@ -38,9 +36,9 @@ public class FailureAnalysisServiceTest {
 
     @Test
     void usesParserThatSupportsProvider() {
-        BuildEvent event = new BuildEvent();
-        BuildLog log = new BuildLog();
-        AnalysisResult result = new AnalysisResult();
+        BuildEvent event = new BuildEvent(null, null, null, null);
+        BuildLog log = new BuildLog(null, null);
+        AnalysisResult result = new AnalysisResult(null, null, null, null, null);
 
         when(githubParser.supports("github")).thenReturn(true);
         when(githubParser.parse("payload")).thenReturn(event);
@@ -49,7 +47,6 @@ public class FailureAnalysisServiceTest {
 
         service.analyze("github", "payload");
 
-        verify(notifier).send(result);
         verify(store).save(result);
     }
 

@@ -1,6 +1,3 @@
 package com.dillon.cianalyst.core;
 
-public class BuildLog {
-    public BuildEvent event;
-    public String content;
-}
+public record BuildLog(BuildEvent event, String content) {}

@@ -51,24 +51,17 @@ public class DatastoreAnalysisResultStore implements AnalysisResultStore {
 
     private AnalysisResultEntity toEntity(AnalysisResult result) {
         AnalysisResultEntity entity = new AnalysisResultEntity();
-        entity.repo = result.event.repo;
-        entity.branch = result.event.branch;
-        entity.category = result.category;
-        entity.rootCause = result.rootCause;
-        entity.summary = result.summary;
+        entity.repo = result.event().repo();
+        entity.branch = result.event().branch();
+        entity.category = result.category();
+        entity.rootCause = result.rootCause();
+        entity.summary = result.summary();
         return entity;
     }
-    
-    private AnalysisResult toDomain(AnalysisResultEntity entity) {
-        BuildEvent event = new BuildEvent();
-        event.repo = entity.repo;
-        event.branch = entity.branch;
 
-        AnalysisResult result = new AnalysisResult();
-        result.event = event;
-        result.category = entity.category;
-        result.rootCause = entity.rootCause;
-        result.summary = entity.summary;
-        return result;
+    private AnalysisResult toDomain(AnalysisResultEntity entity) {
+        BuildEvent event = new BuildEvent(null, entity.repo, entity.branch, null);
+        return new AnalysisResult(
+            entity.id, event, entity.category, entity.rootCause, entity.summary);
     }
 }

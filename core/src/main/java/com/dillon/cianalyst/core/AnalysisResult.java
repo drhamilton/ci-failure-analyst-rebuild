@@ -1,8 +1,3 @@
 package com.dillon.cianalyst.core;
 
-public class AnalysisResult {
-    public BuildEvent event;
-    public String category;
-    public String rootCause;
-    public String summary;
-}
+public record AnalysisResult(Long id, BuildEvent event, String category, String rootCause, String summary) {}

@@ -11,13 +11,11 @@ public class StubFailureAnalyzer implements FailureAnalyzer {
 
     @Override
     public AnalysisResult analyze(BuildLog log) {
-        AnalysisResult result = new AnalysisResult();
-
-        result.event = log.event;
-        result.category = "TEST_FAILURE";
-        result.rootCause = "NullPointerException at PaymentService.java:42";
-        result.summary = "A test failed due to an unexpected null value.";
-
-        return result;
+        return new AnalysisResult(
+            null,
+            log.event(),
+            "TEST_FAILURE",
+            "NullPointerException at PaymentService.java:42",
+            "A test failed due to an unexpected null value.");
     }
 }

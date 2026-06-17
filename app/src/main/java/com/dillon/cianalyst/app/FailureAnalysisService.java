@@ -10,7 +10,6 @@ import com.dillon.cianalyst.core.BuildEvent;
 import com.dillon.cianalyst.core.BuildLog;
 import com.dillon.cianalyst.core.BuildLogFetcher;
 import com.dillon.cianalyst.core.FailureAnalyzer;
-// import com.dillon.cianalyst.core.Notifier;
 import com.dillon.cianalyst.core.WebhookParser;
 
 import lombok.RequiredArgsConstructor;

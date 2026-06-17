@@ -24,15 +24,13 @@ public class GithubWebhookParser implements WebhookParser {
     public BuildEvent parse(String rawPaylod) {
         try {
            JsonNode root = mapper.readTree(rawPaylod);
-           JsonNode run = root.path("workflow_run"); 
+           JsonNode run = root.path("workflow_run");
 
-           BuildEvent event = new BuildEvent();
-
-           event.id = run.path("id").asText();
-           event.repo = root.path("repository").path("full_name").asText();
-           event.branch = run.path("head_branch").asText();
-           event.status = run.path("conclusion").asText();
-           return event;
+           return new BuildEvent(
+               run.path("id").asText(),
+               root.path("repository").path("full_name").asText(),
+               run.path("head_branch").asText(),
+               run.path("conclusion").asText());
         } catch (JsonProcessingException e) {
             throw new WebhookParseException("Failed to parse webhook payload", e);
         }

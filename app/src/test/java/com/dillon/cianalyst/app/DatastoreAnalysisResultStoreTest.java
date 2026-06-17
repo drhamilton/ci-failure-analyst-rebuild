@@ -23,18 +23,17 @@ import com.dillon.cianalyst.core.BuildEvent;
 public class DatastoreAnalysisResultStoreTest {
    
     @Mock AnalysisResultRepository repository;
+    @Mock OutboxRepository outboxRepository;
     @InjectMocks DatastoreAnalysisResultStore store;
 
     @Test
     void savesByMappingDomainToEntity() {
-        AnalysisResult result = new AnalysisResult();
-
-        result.event = new BuildEvent();
-        result.event.repo = "dillon/payments-service";
-        result.event.branch = "main";
-        result.category = "TEST_FAILURE";
-        result.rootCause = "NPE at PaymentService.java:42";
-        result.summary = "A test failed.";
+        AnalysisResult result = new AnalysisResult(
+            null,
+            new BuildEvent(null, "dillon/payments-service", "main", null),
+            "TEST_FAILURE",
+            "NPE at PaymentService.java:42",
+            "A test failed.");
 
         when(repository.save(any(AnalysisResultEntity.class)))
             .thenAnswer(returnsFirstArg());
@@ -62,7 +61,7 @@ public class DatastoreAnalysisResultStoreTest {
         List<AnalysisResult> results = store.findAll();
 
         assertThat(results).hasSize(1);
-        assertThat(results.get(0).event.repo).isEqualTo("dillon/payments-service");
-        assertThat(results.get(0).summary).isEqualTo("A test failed.");
+        assertThat(results.get(0).event().repo()).isEqualTo("dillon/payments-service");
+        assertThat(results.get(0).summary()).isEqualTo("A test failed.");
     }
 }

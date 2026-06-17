@@ -10,10 +10,7 @@ import com.dillon.cianalyst.core.BuildLogFetcher;
 public class GithubLogFetcher implements BuildLogFetcher {
     @Override
     public BuildLog fetch(BuildEvent event) {
-        BuildLog log = new BuildLog();
-        log.event = event;
-        log.content = "Failed: nullpointerexception at paymentservice.java";
-        return log;
+        return new BuildLog(event, "Failed: nullpointerexception at paymentservice.java");
     }
 
 }
