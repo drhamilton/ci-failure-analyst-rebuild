@@ -10,6 +10,7 @@ import com.dillon.cianalyst.core.BuildEvent;
 import com.dillon.cianalyst.core.BuildLog;
 import com.dillon.cianalyst.core.BuildLogFetcher;
 
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
 
 @Component
@@ -18,6 +19,7 @@ public class GithubLogFetcher implements BuildLogFetcher {
     private final RestClient githubRestClient;
 
     @Override
+    @Retry(name = "github")
     public BuildLog fetch(BuildEvent event) {
         String[] parts = event.repo().split("/", 2);
 
