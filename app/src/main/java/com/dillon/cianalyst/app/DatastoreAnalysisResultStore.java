@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +16,7 @@ import com.dillon.cianalyst.core.BuildEvent;
 import lombok.RequiredArgsConstructor;
 
 @Component
+@Profile("!aws")
 @RequiredArgsConstructor
 public class DatastoreAnalysisResultStore implements AnalysisResultStore {
     private final AnalysisResultRepository repository;
