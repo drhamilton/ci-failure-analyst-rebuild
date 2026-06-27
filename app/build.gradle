@@ -2,6 +2,11 @@ plugins {
     id 'org.springframework.boot'
 }
 
+// Spring Boot 3.2.5 pins Testcontainers 1.19.x, whose bundled docker-java can't
+// negotiate with modern Docker daemons (defaults to API 1.32, daemon needs >=1.40).
+// Override the BOM property to a build that negotiates correctly.
+ext['testcontainers.version'] = '1.21.4'
+
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
@@ -10,5 +15,22 @@ dependencies {
     implementation "io.github.resilience4j:resilience4j-spring-boot3:2.2.0"
     implementation "org.springframework.boot:spring-boot-starter-actuator"
     implementation "org.springframework.boot:spring-boot-starter-aop"
+
+    // AWS — DynamoDB via the enhanced (mapped-bean) client. url-connection-client
+    // is the lightweight sync HTTP impl the SDK requires on the classpath.
+    implementation 'software.amazon.awssdk:dynamodb-enhanced'
+    implementation 'software.amazon.awssdk:url-connection-client'
+
     testImplementation "com.squareup.okhttp3:mockwebserver:4.12.0"
+    // Testcontainers + LocalStack for the DynamoDB integration test (versions
+    // are managed by the Spring Boot dependencies BOM).
+    testImplementation 'org.testcontainers:junit-jupiter'
+    testImplementation 'org.testcontainers:localstack'
+}
+
+test {
+    // Testcontainers' bundled docker-java negotiates API version 1.32, which modern
+    // Docker daemons reject (min 1.40). Pin a modern version on the forked test JVM;
+    // overridable via the DOCKER_API_VERSION env var.
+    environment 'DOCKER_API_VERSION', System.getenv().getOrDefault('DOCKER_API_VERSION', '1.43')
 }
