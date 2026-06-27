@@ -1,5 +1,6 @@
 package com.dillon.cianalyst.app;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
+@Profile("!aws")
 public class OutboxRelay {
     private final OutboxRepository outboxRepository;
     private final AnalysisResultStore store;
