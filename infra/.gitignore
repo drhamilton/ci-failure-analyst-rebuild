@@ -1,0 +1,12 @@
+# tflocal-generated provider override (points at LocalStack; never commit)
+localstack_providers_override.tf
+
+# Terraform working files
+.terraform/
+.terraform.lock.hcl
+
+# State and plans (local-only; remote state comes later)
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
