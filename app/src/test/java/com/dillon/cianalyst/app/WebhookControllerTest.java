@@ -1,6 +1,5 @@
 package com.dillon.cianalyst.app;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
@@ -43,14 +42,24 @@ public class WebhookControllerTest {
         doThrow(new WebhookVerificationException("bad signature"))
             .when(verifier).verify(any(), any());
 
-        assertThatThrownBy(() ->
-            mockMvc.perform(post("/webhook/github")
+        mockMvc.perform(post("/webhook/github")
                 .contentType("application/json")
                 .header("X-Hub-Signature-256", "sha256=bad")
-                .content("{}")))
-            .hasCauseInstanceOf(WebhookVerificationException.class);
+                .content("{}"))
+            .andExpect(status().isUnauthorized());
 
         // The security invariant: a bad signature never reaches analysis.
+        verify(service, never()).analyze(any(), any());
+    }
+
+    @Test
+    void rejectsUnverifiableProvider() throws Exception {
+        // buildkite has no verifier yet → fail closed with a clean 404, never analyzed.
+        mockMvc.perform(post("/webhook/buildkite")
+                .contentType("application/json")
+                .content("{}"))
+            .andExpect(status().isNotFound());
+
         verify(service, never()).analyze(any(), any());
     }
 }
