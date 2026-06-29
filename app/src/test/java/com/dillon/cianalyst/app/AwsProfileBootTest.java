@@ -14,8 +14,12 @@ import com.dillon.cianalyst.core.AnalysisResultStore;
  * Datastore/context autoconfig is excluded (no GCP credentials or emulator needed) and
  * the DynamoDB adapter is wired in its place. The DynamoDB clients build lazily, so this
  * needs no running DynamoDB / Docker.
+ *
+ * Uses a MOCK web environment (not NONE) so the servlet/security layer loads: the
+ * SecurityConfig filter chain needs an HttpSecurity bean, which only exists in a web
+ * context. MOCK still starts no real port. Security must never be silently skipped.
  */
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @ActiveProfiles("aws")
 class AwsProfileBootTest {
 

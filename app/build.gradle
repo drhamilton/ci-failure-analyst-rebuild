@@ -21,6 +21,8 @@ dependencies {
     implementation 'software.amazon.awssdk:dynamodb-enhanced'
     implementation 'software.amazon.awssdk:url-connection-client'
 
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
     testImplementation "com.squareup.okhttp3:mockwebserver:4.12.0"
     // Testcontainers + LocalStack for the DynamoDB integration test (versions
     // are managed by the Spring Boot dependencies BOM).
