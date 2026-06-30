@@ -10,6 +10,7 @@ import com.dillon.cianalyst.core.BuildEvent;
 import com.dillon.cianalyst.core.BuildLog;
 import com.dillon.cianalyst.core.BuildLogFetcher;
 import com.dillon.cianalyst.core.FailureAnalyzer;
+import com.dillon.cianalyst.core.LogArchive;
 import com.dillon.cianalyst.core.WebhookParser;
 
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ public class FailureAnalysisService {
     private final BuildLogFetcher logFetcher;
     private final FailureAnalyzer analyzer;
     private final AnalysisResultStore store;
+    private final LogArchive logArchive;
 
     public void analyze(String provider, String payload) {
         WebhookParser parser = parsers.stream()
@@ -30,7 +32,8 @@ public class FailureAnalysisService {
 
         BuildEvent event = parser.parse(payload);
         BuildLog log = logFetcher.fetch(event);
-        AnalysisResult result = analyzer.analyze(log);
+        String logKey = logArchive.put(log);
+        AnalysisResult result = analyzer.analyze(log).withLogKey(logKey);
         store.save(result);
     }
 }

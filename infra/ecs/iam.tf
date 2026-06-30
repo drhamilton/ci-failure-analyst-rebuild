@@ -66,3 +66,17 @@ resource "aws_iam_role_policy" "task_dynamodb" {
   role   = aws_iam_role.task.id
   policy = data.aws_iam_policy_document.task_dynamodb.json
 }
+
+# Read/write build-log objects in the bucket only (not the bucket itself, not ListBucket).
+data "aws_iam_policy_document" "task_s3" {
+  statement {
+    actions   = ["s3:PutObject", "s3:GetObject"]
+    resources = ["${data.aws_s3_bucket.logs.arn}/*"]
+  }
+}
+
+resource "aws_iam_role_policy" "task_s3" {
+  name   = "build-logs-access"
+  role   = aws_iam_role.task.id
+  policy = data.aws_iam_policy_document.task_s3.json
+}

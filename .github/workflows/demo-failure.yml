@@ -1,0 +1,29 @@
+# A deliberately-failing build so the CI Failure Analyst has a real failed run to
+# fetch via the GitHub Actions API (GET /repos/{owner}/{repo}/actions/runs/{id}/jobs).
+#
+# Manual trigger only — it never gates normal pushes. Mint a fresh failed run with:
+#   gh workflow run demo-failure.yml
+#   gh run list --workflow demo-failure.yml   # grab the run id to feed the app
+name: demo-failure
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Compile
+        run: echo "compiling sources... ok"
+
+      - name: Run tests
+        run: |
+          echo "Running test suite..."
+          echo "OutboxRelayTest > flipsPendingToSent PASSED"
+          echo "FailureAnalysisServiceTest > savesResult FAILED"
+          echo "  org.opentest4j.AssertionFailedError:"
+          echo "  expected: <SENT> but was: <PENDING>"
+          echo "  at FailureAnalysisServiceTest.savesResult(FailureAnalysisServiceTest.java:42)"
+          exit 1

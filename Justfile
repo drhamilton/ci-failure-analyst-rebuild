@@ -7,11 +7,29 @@ set shell := ["bash", "-cu"]
 ecs_dir := "infra/ecs"
 base_dir := "infra/base"
 cluster := "ci-failure-analyst"
+repo := "ci-failure-analyst"
 log_group := "/ecs/ci-failure-analyst"
 
 # Show available recipes
 default:
     @just --list
+
+# Build the image and push to ECR as :latest (+ the short git SHA for traceability).
+# The task def pulls :latest, so run this before `just up` whenever app/ code changes.
+push:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    ACCOUNT=$(aws sts get-caller-identity --query Account --output text)
+    REGION=${AWS_REGION:-$(aws configure get region)}
+    REGISTRY="$ACCOUNT.dkr.ecr.$REGION.amazonaws.com"
+    REPO="$REGISTRY/{{repo}}"
+    SHA=$(git rev-parse --short HEAD)
+    echo "building + pushing $REPO :latest + :$SHA"
+    aws ecr get-login-password --region "$REGION" | docker login --username AWS --password-stdin "$REGISTRY"
+    docker build -t "$REPO:latest" -t "$REPO:$SHA" .
+    docker push "$REPO:latest"
+    docker push "$REPO:$SHA"
+    echo "pushed. (re)deploy with: just up"
 
 # Spin up the Fargate task (desired=1), ingress locked to your current IP
 up:

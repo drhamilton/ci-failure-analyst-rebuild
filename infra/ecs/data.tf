@@ -10,6 +10,11 @@ data "aws_dynamodb_table" "analysis_results" {
   name = "analysis_results"
 }
 
+# Build-log bucket from base/ (same account-id-suffixed name base/s3.tf creates).
+data "aws_s3_bucket" "logs" {
+  bucket = "ci-failure-analyst-logs-${data.aws_caller_identity.current.account_id}"
+}
+
 # Default VPC + its public subnets (cheap path: task gets a public IP, no NAT).
 data "aws_vpc" "default" {
   default = true

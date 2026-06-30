@@ -33,7 +33,8 @@ public class DatastoreAnalysisResultStoreTest {
             new BuildEvent(null, "dillon/payments-service", "main", null),
             "TEST_FAILURE",
             "NPE at PaymentService.java:42",
-            "A test failed.");
+            "A test failed.",
+            null);
 
         when(repository.save(any(AnalysisResultEntity.class)))
             .thenAnswer(returnsFirstArg());

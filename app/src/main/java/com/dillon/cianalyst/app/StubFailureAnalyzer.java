@@ -16,6 +16,7 @@ public class StubFailureAnalyzer implements FailureAnalyzer {
             log.event(),
             "TEST_FAILURE",
             "NullPointerException at PaymentService.java:42",
-            "A test failed due to an unexpected null value.");
+            "A test failed due to an unexpected null value.",
+            null);
     }
 }

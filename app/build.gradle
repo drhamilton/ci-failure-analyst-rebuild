@@ -19,6 +19,7 @@ dependencies {
     // AWS — DynamoDB via the enhanced (mapped-bean) client. url-connection-client
     // is the lightweight sync HTTP impl the SDK requires on the classpath.
     implementation 'software.amazon.awssdk:dynamodb-enhanced'
+    implementation 'software.amazon.awssdk:s3'
     implementation 'software.amazon.awssdk:url-connection-client'
 
     implementation 'org.springframework.boot:spring-boot-starter-security'

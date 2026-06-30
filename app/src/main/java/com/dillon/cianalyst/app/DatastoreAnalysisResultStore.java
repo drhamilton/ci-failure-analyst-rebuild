@@ -64,6 +64,6 @@ public class DatastoreAnalysisResultStore implements AnalysisResultStore {
     private AnalysisResult toDomain(AnalysisResultEntity entity) {
         BuildEvent event = new BuildEvent(null, entity.repo, entity.branch, null);
         return new AnalysisResult(
-            entity.id, event, entity.category, entity.rootCause, entity.summary);
+            entity.id, event, entity.category, entity.rootCause, entity.summary, null);
     }
 }
