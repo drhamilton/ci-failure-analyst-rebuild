@@ -22,8 +22,12 @@ resource "aws_ecs_task_definition" "app" {
     essential = true
     portMappings = [{ containerPort = 8080 }]
 
-    # plaintext config
-    environment = [{ name = "SPRING_PROFILES_ACTIVE", value = "aws" }]
+    # plaintext config. AWS_S3_BUCKET binds to the app's `aws.s3.bucket` property
+    # (Spring relaxed binding) so the S3LogArchive writes to the real bucket.
+    environment = [
+      { name = "SPRING_PROFILES_ACTIVE", value = "aws" },
+      { name = "AWS_S3_BUCKET", value = data.aws_s3_bucket.logs.bucket },
+    ]
 
     # references resolved + decrypted at launch by the execution role
     secrets = [
