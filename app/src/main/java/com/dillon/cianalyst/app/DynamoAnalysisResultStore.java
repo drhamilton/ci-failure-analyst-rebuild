@@ -55,12 +55,13 @@ public class DynamoAnalysisResultStore implements AnalysisResultStore {
         entity.setCategory(result.category());
         entity.setRootCause(result.rootCause());
         entity.setSummary(result.summary());
+        entity.setLogKey(result.logKey());
         return entity;
     }
 
     private AnalysisResult toDomain(DynamoAnalysisResultEntity entity) {
         BuildEvent event = new BuildEvent(null, entity.getRepo(), entity.getBranch(), null);
         return new AnalysisResult(
-            entity.getId(), event, entity.getCategory(), entity.getRootCause(), entity.getSummary());
+            entity.getId(), event, entity.getCategory(), entity.getRootCause(), entity.getSummary(), entity.getLogKey());
     }
 }

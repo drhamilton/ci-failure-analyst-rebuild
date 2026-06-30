@@ -16,6 +16,7 @@ public class DynamoAnalysisResultEntity {
     private String category;
     private String rootCause;
     private String summary;
+    private String logKey;
 
     @DynamoDbPartitionKey
     public Long getId() {
@@ -64,5 +65,13 @@ public class DynamoAnalysisResultEntity {
 
     public void setSummary(String summary) {
         this.summary = summary;
+    }
+
+    public String getLogKey() {
+        return logKey;
+    }
+
+    public void setLogKey(String logKey) {
+        this.logKey = logKey;
     }
 }

@@ -68,7 +68,8 @@ class DynamoAnalysisResultStoreIntegrationTest {
             new BuildEvent(null, "dillon/payments-service", "main", null),
             "TEST_FAILURE",
             "NPE at PaymentService.java:42",
-            "A test failed."));
+            "A test failed.",
+            "logs/dillon/payments-service/1.txt"));
 
         assertThat(saved.id()).isNotNull();
 
@@ -79,6 +80,7 @@ class DynamoAnalysisResultStoreIntegrationTest {
         assertThat(found.get().category()).isEqualTo("TEST_FAILURE");
         assertThat(found.get().rootCause()).isEqualTo("NPE at PaymentService.java:42");
         assertThat(found.get().summary()).isEqualTo("A test failed.");
+        assertThat(found.get().logKey()).isEqualTo("logs/dillon/payments-service/1.txt");
     }
 
     @Test
@@ -93,7 +95,8 @@ class DynamoAnalysisResultStoreIntegrationTest {
             new BuildEvent(null, "dillon/orders-service", "release", null),
             "COMPILE_ERROR",
             "missing semicolon",
-            "Build broke."));
+            "Build broke.",
+            null));
 
         assertThat(store.findAll())
             .extracting(r -> r.event().repo())
